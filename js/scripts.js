@@ -2,8 +2,12 @@ $(document).ready(function(){
   console.log('scripts loaded');
 
   var html = '';
-  var grants;
   var url = '../NEH_Grants2010s.xml';
+  var grants;
+  var YearAwarded = '';
+  var OriginalAmount = '';
+  var ProjectTitle = '';
+  var ToSupport = '';
 
 
   $.ajax({
@@ -14,7 +18,24 @@ $(document).ready(function(){
     async: true,
     success: function(grants){
       console.log(grants);
-      html += '<h1 id="title>"NEH Grants 2010s</h1>';
+      $(grants).find('Grant').each(function(){
+        YearAwarded = $(this).find('YearAwarded').text();
+        ProjectTitle = $(this).find('ProjectTitle').text();
+        OriginalAmount = $(this).find('OriginalAmount').text();
+        ToSupport = $(this).find('ToSupport').text();
+        if(ToSupport == 'None'){
+          html += '<tr id="none"></tr>';
+        }
+        else{
+          html += '<tr>';
+          html +=  '<td>' + ProjectTitle + '</td>';
+          html +=  '<td>' + YearAwarded + '</td>';
+          html +=  '<td>' + OriginalAmount + '</td>';
+          html +=  '<td>' + ToSupport + '</td>';
+          html += '</tr>';
+        }
+      });
+      $('#results').append(html);
     }
   });
 
